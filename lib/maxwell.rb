@@ -90,12 +90,12 @@ class Maxwell
         url2 = res.headers['location'] || res.headers['Location']
         puts "GET #{url2}..."
         res2 = @client.get(url2)
-        res2.body
+        res2
       else
         ''
       end
     else
-      res.body
+      res
     end
   end
 end

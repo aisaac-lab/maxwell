@@ -45,6 +45,7 @@ class Maxwell
     else
       Maxwell::USER_AGENTS.fetch(user_agent)
     end
+    puts "UA: #{agent_name}"
 
     @client = if proxy.empty?
       HTTPClient.new(agent_name: agent_name)
@@ -92,7 +93,7 @@ class Maxwell
         res2 = @client.get(url2)
         res2
       else
-        ''
+        nil
       end
     else
       res

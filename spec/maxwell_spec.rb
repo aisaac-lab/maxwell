@@ -14,5 +14,12 @@ RSpec.describe Maxwell do
     # json = JSON.parse m.get('https://xxxx/inspect')
 
     # expect(json['HTTP_USER_AGENT']).not_to include('ruby')
+    m = Maxwell.new(proxy: {
+      url: '',
+      user: '',
+      pass: '',
+    })
+
+    m = Maxwell.new(user_agent: :aa)
   end
 end

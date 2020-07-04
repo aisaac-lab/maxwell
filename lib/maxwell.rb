@@ -62,18 +62,21 @@ class Maxwell
   def get(url, need_redirect: false)
     begin
       get_res(url, need_redirect)
-    rescue
+    rescue => ex
       begin
         puts 'Failure 1'
+        puts ex.message
         sleep 20
         get_res(url, need_redirect)
-      rescue
+      rescue => ex
         begin
           puts 'Failure 2'
+          puts ex.message
           sleep 60 * 2
           get_res(url, need_redirect)
-        rescue
+        rescue => ex
           puts 'Failure 3'
+          puts ex.message
           sleep 60 * 5
           get_res(url, need_redirect)
         end

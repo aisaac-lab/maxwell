@@ -1,4 +1,4 @@
-require 'JSON'
+require 'json'
 
 RSpec.describe Maxwell do
   it "has a version number" do
@@ -6,20 +6,16 @@ RSpec.describe Maxwell do
   end
 
   example do
-    # m = Maxwell.new(proxy: {
-    #   url: ,
-    #   user: ,
-    #   pass: 
-    # })
-    # json = JSON.parse m.get('https://xxxx/inspect')
+    ips = 10.times.map {
+      m = Maxwell.new(proxy: {
+        url:  ENV.fetch('URL'),
+        user: ENV.fetch('USER'),
+        pass: ENV.fetch('PASS'),
+      })
+      res = m.get('https://api.ipify.org?format=json')
+      JSON.parse(res.body)['ip'].tap { |ip| puts ip }
+    }
 
-    # expect(json['HTTP_USER_AGENT']).not_to include('ruby')
-    m = Maxwell.new(proxy: {
-      url: '',
-      user: '',
-      pass: '',
-    })
-
-    m = Maxwell.new(user_agent: :aa)
+    expect(5 < ips.uniq.count).to eq(true)
   end
 end

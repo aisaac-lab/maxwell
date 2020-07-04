@@ -13,7 +13,7 @@ res.body
 ## Installation
 
 ```ruby
-gem 'maxwell'
+gem 'maxwell', github: 'aisaac-lab/maxwell'
 ```
 
 And then execute:

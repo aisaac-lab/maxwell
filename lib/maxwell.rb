@@ -1,4 +1,5 @@
 require "maxwell/version"
+require "maxwell/user_agent"
 require "httpclient"
 
 class HTTPClient::Session
@@ -27,23 +28,11 @@ class HTTPClient::Session
 end
 
 class Maxwell
-  USER_AGENTS = {
-    win_ie11:   "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; MALC; rv:11.0) like Gecko",
-
-    mac_safari: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15",
-
-    mac_chrome: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36",
-    win_chrome: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100",
-
-    mac_firefox: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:62.0) Gecko/20100101 Firefox/62.0",
-    win_firefox: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0"
-  }
-
   def initialize(proxy: {}, user_agent: nil)
     agent_name = if user_agent.nil?
-      Maxwell::USER_AGENTS.values.sample
+      Maxwell::UserAgent.get
     else
-      Maxwell::USER_AGENTS.fetch(user_agent)
+      user_agent
     end
     puts "UA: #{agent_name}"
 
@@ -59,28 +48,16 @@ class Maxwell
     end
   end
 
-  def get(url, need_redirect: false)
+  def get(url, need_redirect: false, max_try_count: 5)
+    try = 0
     begin
+      try += 1
       get_res(url, need_redirect)
     rescue => ex
-      begin
-        puts 'Failure 1'
-        puts ex.message
-        sleep 20
-        get_res(url, need_redirect)
-      rescue => ex
-        begin
-          puts 'Failure 2'
-          puts ex.message
-          sleep 60 * 2
-          get_res(url, need_redirect)
-        rescue => ex
-          puts 'Failure 3'
-          puts ex.message
-          sleep 60 * 5
-          get_res(url, need_redirect)
-        end
-      end
+      puts "Failure #{try}"
+      sleep try ** 3 * 10
+      retry if try < max_try_count
+      raise ex
     end
   end
 

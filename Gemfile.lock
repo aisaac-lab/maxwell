@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    maxwell (0.1.5)
+    maxwell (0.1.6)
       httpclient (= 2.8.3)
 
 GEM

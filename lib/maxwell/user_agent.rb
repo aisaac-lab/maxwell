@@ -26,14 +26,14 @@ class Maxwell
       end
 
       def pc_index
-        Maxwell::UserAgent::INDEXES.select {
-          Woothee.parse(Maxwell::UserAgent::AGS[_1])[:category] == :pc
+        Maxwell::UserAgent::INDEXES.select { |index|
+          Woothee.parse(Maxwell::UserAgent::AGS[index])[:category] == :pc
         }.sample
       end
 
       def sp_index
         Maxwell::UserAgent::INDEXES.select {
-          Woothee.parse(Maxwell::UserAgent::AGS[_1])[:category] == :smartphone
+          Woothee.parse(Maxwell::UserAgent::AGS[index])[:category] == :smartphone
         }.sample
       end
     end

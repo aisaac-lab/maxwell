@@ -54,7 +54,7 @@ class Maxwell
       try += 1
       get_res(url, need_redirect)
     rescue => ex
-      puts "Failure #{try}"
+      puts "Failure #{try} #{ex.message}"
       sleep try ** 3 * 10
       retry if try < max_try_count
       raise ex
@@ -65,10 +65,18 @@ class Maxwell
     puts "GET #{url}..."
     res = @client.get(url)
     if res.redirect?
-      puts 'redirecting..!'
+      puts 'redirecting...'
       if need_redirect
-        puts 'need_redirect..!'
+        puts 'need_redirect...'
         url2 = res.headers['location'] || res.headers['Location']
+        unless url2.match(/http/)
+          if url2.match(%r|\A/|)
+            url2 = "#{URI(url).scheme}://#{URI(url).host}#{url2}"
+          else
+            raise "something wrong: url2=#{url2}"
+          end
+        end
+
         puts "GET #{url2}..."
         res2 = @client.get(url2)
         res2

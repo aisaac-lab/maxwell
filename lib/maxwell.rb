@@ -46,6 +46,8 @@ class Maxwell
         client.set_proxy_auth(proxy.fetch(:user), proxy.fetch(:pass))
       end
     end
+
+    @client.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
   end
 
   def get(url, need_redirect: false, max_try_count: 5)
